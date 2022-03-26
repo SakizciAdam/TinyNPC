@@ -20,6 +20,8 @@
 *.rar
 *.iml
 
+.idea/
+
 api/target/*
 
 1_16_R3/target/*
