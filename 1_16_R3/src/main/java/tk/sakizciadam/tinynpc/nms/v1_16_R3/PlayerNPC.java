@@ -348,7 +348,7 @@ public class PlayerNPC extends WrapperNPC implements tk.sakizciadam.tinynpc.api.
 
         public List<Packet> getSpawnPackets() {
             List<Packet> packets=new ArrayList<>();
-
+            this.getDataWatcher().set( DataWatcherRegistry.a.a(16), (byte)127);
 
             packets.add(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, this));
 
@@ -356,7 +356,11 @@ public class PlayerNPC extends WrapperNPC implements tk.sakizciadam.tinynpc.api.
 
             packets.add(new PacketPlayOutEntityHeadRotation(this, (byte) ((this.yaw * 256f) / 360f)));
 
+            packets.add(new PacketPlayOutEntityMetadata(this.getId(),this.getDataWatcher(),true));
+
             packets.add(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, this));
+
+
 
             return packets;
         }
