@@ -38,7 +38,13 @@ public class Hologram {
 
     }
 
+    public ArmorStand getArmorStand() {
+        return armorStand;
+    }
 
+    public void setArmorStand(ArmorStand armorStand) {
+        this.armorStand = armorStand;
+    }
 
     public void setColorText(String text){
         setText(ChatColor.translateAlternateColorCodes('&',text));

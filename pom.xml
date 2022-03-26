@@ -7,7 +7,7 @@
     <groupId>tk.sakizciadam</groupId>
     <artifactId>tinynpc</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <modules>
         <module>plugin</module>
         <module>1_16_R3</module>
