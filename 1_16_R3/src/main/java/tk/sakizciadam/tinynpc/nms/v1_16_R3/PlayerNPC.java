@@ -25,11 +25,22 @@ public class PlayerNPC extends WrapperNPC implements tk.sakizciadam.tinynpc.api.
     private boolean showOnJoin;
 
     public List<UUID> show=new ArrayList<>();
+    private long showDelay;
 
     public PlayerNPC(){
         this.uuid=UUID.randomUUID();
         this.name="Steve";
     }
+
+    public long getShowDelay(){
+        return showDelay;
+    }
+
+    @Override
+    public void setShowDelay(long i) {
+        this.showDelay=i;
+    }
+
 
     public boolean canSee(Player player){
         return show.contains(player.getUniqueId())&&isSpawned();

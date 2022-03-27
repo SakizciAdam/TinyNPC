@@ -88,6 +88,16 @@ public class PlayerListener implements Listener {
             if(playerNPC.canSee(p)) continue;
 
             playerNPC.spawnFor(p);
+
+            if(playerNPC.getShowDelay()<=0){
+
+                return;
+            }
+
+            Bukkit.getScheduler().runTaskLater(lib.getJavaPlugin(), () -> {
+                p.sendMessage("lol");
+                playerNPC.update();
+            },playerNPC.getShowDelay());
         }
     }
 

@@ -34,6 +34,7 @@ public class TestCommand implements CommandExecutor {
 
             npc.setWrappedGameProfile(wrappedGameProfile);
             npc.setHologram(ChatColor.translateAlternateColorCodes('&',"&aNPC Shop"));
+            npc.setShowDelay(30L);
 
             npc.spawn(p.getLocation());
             ((Player)npc.getEntity()).getInventory().setItem(EquipmentSlot.HAND,new ItemStack(Material.NETHERITE_HOE));
@@ -43,6 +44,7 @@ public class TestCommand implements CommandExecutor {
             npc.setGamemode(GameMode.CREATIVE);
 
             npc.setNavigationSpeed(3);
+
             npc.showEverybody();
             npc.setShowOnJoin(true);
 

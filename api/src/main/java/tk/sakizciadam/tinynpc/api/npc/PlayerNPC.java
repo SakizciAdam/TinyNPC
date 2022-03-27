@@ -31,4 +31,8 @@ public interface PlayerNPC extends NPC {
 
     boolean canSee(Player player);
 
+    long getShowDelay();
+
+    void setShowDelay(long i);
+
 }
