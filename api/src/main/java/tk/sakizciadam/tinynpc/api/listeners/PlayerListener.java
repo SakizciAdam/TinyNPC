@@ -95,7 +95,7 @@ public class PlayerListener implements Listener {
             }
 
             Bukkit.getScheduler().runTaskLater(lib.getJavaPlugin(), () -> {
-                p.sendMessage("lol");
+
                 playerNPC.update();
             },playerNPC.getShowDelay());
         }
