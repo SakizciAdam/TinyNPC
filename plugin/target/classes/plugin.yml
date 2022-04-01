@@ -1,0 +1,10 @@
+name: TinyNPC
+main: tk.sakizciadam.tinynpc.plugin.TinyNPCPlugin
+version: '1.0'
+api-version: 1.16
+depends:
+  - ProtocolLib
+commands:
+  spawnnpc:
+    usage: /spawnnpc
+    description: Spawns a npc
