@@ -6,7 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="TinyNPCRecoded" />
+        <module name="plugin" />
+        <module name="api" />
+        <module name="1_16_R3" />
       </profile>
     </annotationProcessing>
   </component>
