@@ -120,7 +120,6 @@ public class PlayerNPC extends AbstractPlayerNPC {
         entity.playerConnection = new PlayerConnection(entity.server, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), entity);
         setNMSEntity(entity);
         entity.teleport(location);
-        spawnHologram();
         entity.getWorld().addEntity(entity);
 
         this.navigationEntity=new NavigationEntity(this,location.getWorld());

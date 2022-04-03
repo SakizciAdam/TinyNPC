@@ -24,8 +24,6 @@ public class ZombieNPC extends AbstractZombieNPC {
         zombieEnt.setBaby(this.isTempBaby());
 
         setNMSEntity(zombieEnt);
-
-        spawnHologram();
         zombieEnt.getWorld().addEntity(zombieEnt);
 
 
