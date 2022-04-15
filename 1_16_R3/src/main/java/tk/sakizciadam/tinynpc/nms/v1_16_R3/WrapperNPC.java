@@ -54,6 +54,9 @@ public abstract class WrapperNPC implements NPC {
 
     public void remove(){
         if(isSpawned()){
+            if(this.getHologram()!=null&&this.getHologram().getArmorStand()!=null){
+                this.getHologram().getArmorStand().remove();
+            }
             getEntity().remove();
             setNMSEntity(null);
             lib.getNpcManager().getNPCList().remove(this);

@@ -6,6 +6,7 @@ import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -54,6 +55,7 @@ public class PlayerNPC extends WrapperNPC implements tk.sakizciadam.tinynpc.api.
             setNMSEntity(null);
             navigationEntity=null;
             getLib().getNpcManager().getNPCList().remove(this);
+
 
         }
     }
@@ -230,6 +232,15 @@ public class PlayerNPC extends WrapperNPC implements tk.sakizciadam.tinynpc.api.
             PacketPlayOutEntityEquipment item = new PacketPlayOutEntityEquipment(entity.getBukkitEntity().getEntityId(), pairs);
             playerConnection.sendPacket(item);
         }
+
+        if(this.getHologram()!=null){
+            if(this.getHologram().getArmorStand()!=null){
+                playerConnection.sendPacket(new PacketPlayOutEntityDestroy(this.getHologram().getArmorStand().getEntityId()));
+                playerConnection.sendPacket(new PacketPlayOutSpawnEntityLiving(((CraftArmorStand)this.getHologram().getArmorStand()).getHandle()));
+                playerConnection.sendPacket(new PacketPlayOutEntityMetadata(this.getHologram().getArmorStand().getEntityId(),((CraftArmorStand)this.getHologram().getArmorStand()).getHandle().getDataWatcher(),true));
+            }
+        }
+
         show.add(player.getUniqueId());
     }
 
