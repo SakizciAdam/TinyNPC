@@ -41,7 +41,7 @@ public class MoveListener implements Listener {
 
 
 
-            if(npc.getEntity().getLocation().distance(p.getLocation())>=Bukkit.getViewDistance()){
+            if(npc.getEntity().getLocation().distance(p.getLocation())>=Bukkit.getViewDistance()*Bukkit.getViewDistance()){
                 if(pNPC.getShowList().contains(p.getUniqueId())){
                     pNPC.despawnFor(p);
                 }
