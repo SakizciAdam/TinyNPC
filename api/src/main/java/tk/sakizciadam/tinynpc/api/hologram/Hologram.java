@@ -38,7 +38,6 @@ public class Hologram {
 
 
     }
-
     public ArmorStand getArmorStand() {
         return armorStand;
     }

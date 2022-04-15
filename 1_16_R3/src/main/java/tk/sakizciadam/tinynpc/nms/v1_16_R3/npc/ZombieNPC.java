@@ -60,10 +60,6 @@ public class ZombieNPC extends AbstractZombieNPC {
         return ((EntityLiving)getNMSEntity()).getBukkitEntity();
     }
 
-    @Override
-    public Location getLocation() {
-        return isSpawned() ? getBukkitEntity().getLocation() : null;
-    }
 
     @Override
     public AttackGoal getAttackGoal() {
@@ -95,15 +91,7 @@ public class ZombieNPC extends AbstractZombieNPC {
         }
     }
 
-    @Override
-    public int getID() {
-        return isSpawned() ? getBukkitEntity().getEntityId() : -999;
-    }
 
-    @Override
-    public org.bukkit.World getWorld(){
-        return isSpawned() ? getBukkitEntity().getWorld() : null;
-    }
 
     public static class ZombieEnt extends EntityZombie {
         protected final ZombieNPC parent;

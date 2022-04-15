@@ -33,6 +33,9 @@ public abstract class AbstractPlayerNPC extends AbstractNPC{
         }
     }
 
+    public abstract int getNavigationEntityID();
+
+
     public abstract void spawnFor(Player player);
 
     public abstract void despawnFor(Player player);

@@ -37,20 +37,16 @@ public class NPCListener implements Listener {
     }
 
     @EventHandler
-    public void entityDamage(EntityDeathEvent event){
+    public void onDeath(EntityDeathEvent event){
 
 
         LivingEntity entity= (LivingEntity) event.getEntity();
-        CommonUtils.info("%s",tinyNPC.getRegistry().getNPCList().size());
+
         AbstractNPC npc=(AbstractNPC) tinyNPC.getRegistry().getNPC(entity.getEntityId(),entity.getWorld());
 
         if(npc!=null){
-            if(npc.getHologram()!=null&&npc.getHologram().getArmorStand()!=null){
-                CommonUtils.info("rip");
-                npc.getHologram().getArmorStand().remove();
-                npc.getHologram().setArmorStand(null);
-            }
-        } else {
+
+            npc.onDeath();
 
         }
     }

@@ -8,9 +8,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import tk.sakizciadam.tinynpc.api.npc.goal.AttackGoal;
@@ -32,6 +34,24 @@ public class PlayerNPC extends AbstractPlayerNPC {
 
     public PlayerNPC(String name) {
         super(name);
+    }
+
+    @Override
+    public int getNavigationEntityID() {
+        try {
+            return navigationEntity.getId();
+        } catch (Exception e){
+            return -999;
+        }
+    }
+
+    @Override
+    public void lookAt(LivingEntity entity) {
+        Location loc=getLocation().clone();
+        loc = loc.setDirection(entity.getLocation().subtract(loc).toVector());
+
+
+        navigationEntity.getBukkitEntity().teleport(loc);
     }
 
     @Override
@@ -72,7 +92,18 @@ public class PlayerNPC extends AbstractPlayerNPC {
         playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, (FakePlayer)getNMSEntity()));
         playerConnection.sendPacket(new PacketPlayOutEntityDestroy(getBukkitEntity().getEntityId()));
 
+        if(getHologram()!=null){
+            PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy(this.getHologram().getArmorStand().getEntityId());
+            playerConnection.sendPacket(destroy);
+        }
+
         show.remove(player.getUniqueId());
+    }
+
+    public void onDeath(){
+        super.onDeath();
+        this.navigationEntity.getBukkitEntity().remove();
+        this.navigationEntity=null;
     }
 
     public void tick(){
@@ -108,6 +139,18 @@ public class PlayerNPC extends AbstractPlayerNPC {
 
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(this.navigationEntity.getBukkitEntity().getEntityId());
         playerConnection.sendPacket(packet);
+
+
+        if(getHologram()!=null){
+            PacketPlayOutEntityDestroy destroy = new PacketPlayOutEntityDestroy(this.getHologram().getArmorStand().getEntityId());
+            playerConnection.sendPacket(destroy);
+
+            PacketPlayOutSpawnEntityLiving spawn = new PacketPlayOutSpawnEntityLiving(((CraftArmorStand)this.getHologram().getArmorStand()).getHandle());
+            playerConnection.sendPacket(spawn);
+
+            PacketPlayOutEntityMetadata metadata = new PacketPlayOutEntityMetadata(this.getHologram().getArmorStand().getEntityId(),((CraftArmorStand) this.getHologram().getArmorStand()).getHandle().getDataWatcher(),true);
+            playerConnection.sendPacket(metadata);
+        }
 
 
         show.add(player.getUniqueId());
@@ -154,7 +197,9 @@ public class PlayerNPC extends AbstractPlayerNPC {
 
         public void tick(){
             super.tick();
-
+            if(parent!=null&&!getBukkitEntity().isDead()){
+                parent.tick();
+            }
         }
 
         public void teleport(Location location){
@@ -167,6 +212,14 @@ public class PlayerNPC extends AbstractPlayerNPC {
             }
 
 
+        }
+
+        public List<Packet> getLookPackets(){
+            List<Packet> packets=new ArrayList<>();
+
+            packets.add(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.getId(), (byte) ((yaw%360.)*256/360), (byte) ((pitch%360.)*256/360), false));
+            packets.add(new PacketPlayOutEntityHeadRotation(this, (byte) ((yaw%360.)*256/360)));
+            return packets;
         }
 
         public List<Packet> getSpawnPackets() {
@@ -220,6 +273,8 @@ public class PlayerNPC extends AbstractPlayerNPC {
                 packets.add(item);
             }
 
+            getLookPackets().forEach(packet -> packets.add(packet));
+
             return packets;
         }
 
@@ -238,6 +293,7 @@ public class PlayerNPC extends AbstractPlayerNPC {
             this.parent=parent;
             this.pathFinderGoToLocation.setParent(this.parent);
             this.pathFinderAttack.setParent(this.parent);
+
         }
 
         public void collide(net.minecraft.server.v1_16_R3.Entity entity) {
@@ -247,6 +303,10 @@ public class PlayerNPC extends AbstractPlayerNPC {
 
         public void teleport(Location location){
             this.setPositionRotation(location.getX(),location.getY(),location.getZ(),location.getYaw(),location.getPitch());
+        }
+
+        public boolean damageEntity(DamageSource damageSource,float v){
+            return false;
         }
 
         public void playSound(SoundEffect sound, float f, float v){
@@ -261,9 +321,7 @@ public class PlayerNPC extends AbstractPlayerNPC {
 
         public void tick(){
             super.tick();
-            if(getParent()!=null&&!getBukkitEntity().isDead()){
-                getParent().tick();
-            }
+
         }
 
         public PlayerNPC getParent() {

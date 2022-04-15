@@ -39,7 +39,9 @@ public class MoveListener implements Listener {
 
             if(npc.getBukkitEntity().getWorld()!=p.getWorld()) continue;
 
-            if(npc.getBukkitEntity().getLocation().distance(p.getLocation())>=64){
+            int distance=Bukkit.getViewDistance()/4*3;
+
+            if(npc.getBukkitEntity().getLocation().distance(p.getLocation())>=distance*distance){
                 if(pNPC.show.contains(p.getUniqueId())){
                     pNPC.despawnFor(p);
                 }

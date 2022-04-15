@@ -36,13 +36,32 @@ public abstract class AbstractNPC implements NPC {
         attribute.setBaseValue(d);
     }
 
+    public void lookAt(LivingEntity entity){
+        Location loc=getLocation().clone();
+        loc = loc.setDirection(entity.getLocation().subtract(loc).toVector());
 
+
+        getLivingEntity().teleport(loc);
+    }
+
+    public Location getLocation() {
+        return isSpawned() ? getBukkitEntity().getLocation() : null;
+    }
+
+    @Override
+    public int getID() {
+        return isSpawned() ? getBukkitEntity().getEntityId() : -999;
+    }
+
+    @Override
+    public org.bukkit.World getWorld(){
+        return isSpawned() ? getBukkitEntity().getWorld() : null;
+    }
 
     public void setGravity(boolean v){
         getLivingEntity().setGravity(v);
     }
 
-    public abstract void despawn();
 
     public boolean canPlaySound() {
         return playSound;
@@ -62,21 +81,46 @@ public abstract class AbstractNPC implements NPC {
         return nmsEntity;
     }
 
+    public void onDeath(){
+        removeHologram();
+    }
+
+    public void removeHologram(){
+        if(getHologram()==null) return;
+        if(getHologram().getArmorStand()!=null){
+            getHologram().getArmorStand().remove();
+            getHologram().setArmorStand(null);
+        }
+        hologram=null;
+    }
+
     public void tick(){
         if(getHologram()!=null){
-            if(getHologram().getArmorStand()==null){
-                return;
+            if(getHologram().getArmorStand()!=null){
+                getHologram().teleport(getBukkitEntity().getLocation());
             }
 
-            getHologram().teleport(getBukkitEntity().getLocation());
+
 
         }
     }
+
+    public int getHologramID(){
+        return getHologram()!=null&&getHologram().getArmorStand()!=null ? getHologram().getArmorStand().getEntityId() : -999;
+    }
+
     public void spawnHologram(){
         if(hologram!=null) getHologram().spawn(getBukkitEntity().getLocation());
     }
     public abstract AttackGoal getAttackGoal();
     public abstract LocationGoal getLocationGoal();
+
+    public void despawn(){
+        if(getHologram()!=null&&getHologram().getArmorStand()!=null){
+            getHologram().getArmorStand().remove();
+            getHologram().setArmorStand(null);
+        }
+    }
 
     public void setNMSEntity(Object nmsEntity) {
         this.nmsEntity = nmsEntity;
