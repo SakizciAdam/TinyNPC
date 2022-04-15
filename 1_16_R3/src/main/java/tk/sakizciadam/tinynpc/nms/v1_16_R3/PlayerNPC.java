@@ -161,6 +161,12 @@ public class PlayerNPC extends WrapperNPC implements tk.sakizciadam.tinynpc.api.
         playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, entity));
         playerConnection.sendPacket(new PacketPlayOutEntityDestroy(this.entity.getBukkitEntity().getEntityId()));
 
+        if(this.getHologram()!=null){
+            if(this.getHologram().getArmorStand()!=null){
+                playerConnection.sendPacket(new PacketPlayOutEntityDestroy(this.getHologram().getArmorStand().getEntityId()));
+            }
+        }
+
         show.remove(player.getUniqueId());
     }
 
